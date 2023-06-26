@@ -1,0 +1,75 @@
+{
+  "name": "sql.js-as-sqlite3",
+  "version": "0.1.0",
+  "description": "sqlite3-compatible interface for sql.js",
+  "module": "index.js",
+  "main": "index.cjs",
+  "types": "./index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "require": "./index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "sideEffects": false,
+  "scripts": {
+    "test": "mocha --colors --bail --reporter spec --require ./test/setup.js \"./{,!(node_modules|commonjs|modules)/**/}*.test.js\" --recursive",
+    "clean-for-build": "rimraf ./commonjs/**/* ./modules/**/*",
+    "build-commonjs-modules": "cross-env BABEL_ENV=commonjs babel ./source --out-dir ./commonjs --source-maps",
+    "build-commonjs-package.json": "node runnable/create-commonjs-package-json.js",
+    "build-commonjs": "npm-run-all build-commonjs-modules build-commonjs-package.json",
+    "build-es6-modules": "cross-env BABEL_ENV=es6 babel ./source --out-dir ./modules --source-maps",
+    "browser-build": "rollup --config rollup.config.mjs",
+    "build": "npm-run-all clean-for-build build-commonjs build-es6-modules browser-build",
+    "prepublishOnly": "npm-run-all build test browser-build"
+  },
+  "peerDependencies": {
+    "sql.js": "*"
+  },
+  "dependencies": {
+    "eventemitter3": "^5.0.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.17.10",
+    "@babel/core": "^7.17.12",
+    "@babel/plugin-proposal-class-properties": "^7.17.12",
+    "@babel/plugin-transform-for-of": "^7.17.12",
+    "@babel/plugin-transform-runtime": "^7.17.12",
+    "@babel/preset-env": "^7.17.12",
+    "@babel/register": "^7.17.7",
+    "better-npm-run": "^0.1.1",
+    "chai": "^4.3.6",
+    "core-js": "^3.22.5",
+    "cross-env": "^7.0.3",
+    "mocha": "^10.0.0",
+    "npm-run-all": "^4.1.5",
+    "regenerator-runtime": "^0.13.9",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.73.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "sequelize": "^6.32.1",
+    "sql.js": "^1.8.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/catamphetamine/sql.js-as-sqlite3"
+  },
+  "keywords": [
+    "excel",
+    "xlsx",
+    "browser",
+    "json"
+  ],
+  "author": "catamphetamine <purecatamphetamine@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://gitlab.com/catamphetamine/sql.js-as-sqlite3/issues"
+  },
+  "homepage": "https://gitlab.com/catamphetamine/sql.js-as-sqlite3#readme"
+}
