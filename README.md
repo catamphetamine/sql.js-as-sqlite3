@@ -18,7 +18,7 @@ If you're not using a bundler then use a [standalone version from a CDN](#cdn).
 
 ### Sequelize
 
-This package could be used to make [`sequelize`](https://www.npmjs.com/package/sequelize) work with `sqlite` database in a web browser:
+This package could be used to make [`sequelize`](https://www.npmjs.com/package/sequelize) work with `sqlite` database:
 
 ```js
 import Sequelize from 'sequelize'
@@ -28,6 +28,10 @@ const sequelize = new Sequelize('sqlite://dbname', {
   dialectModule: sqlJsAsSqlite3
 })
 ```
+
+See a [test](https://gitlab.com/catamphetamine/sql.js-as-sqlite3/-/blob/main/test/sequelize.test.js) for an example.
+
+Theoretically, using `sql.js` would allow Sequelize to run in a web browser, but when "bundling" Sequelize itself, and then including it on a web page, it throws [`Buffer is not defined`](https://github.com/sequelize/sequelize/issues/14654#issuecomment-1609773219) error. So seems like Sequelize itself is not ready for running in a web browser.
 
 <!--
 See `./test/sequelize.js`.
