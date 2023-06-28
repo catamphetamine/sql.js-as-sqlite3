@@ -24,7 +24,7 @@ This package could be used to make [`sequelize`](https://www.npmjs.com/package/s
 import Sequelize from 'sequelize'
 import sqlJsAsSqlite3 from 'sql.js-as-sqlite3'
 
-const sequelize = new Sequelize('sqlite://dbname', {
+const sequelize = new Sequelize('sqlite://:memory:', {
   dialectModule: sqlJsAsSqlite3
 })
 ```
