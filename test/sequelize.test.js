@@ -7,7 +7,7 @@ import sqlJsAsSqlite3 from '../source/index.js'
 
 describe('sequelize', function() {
 	it('should work with sequelize', async function() {
-		const sequelize = new Sequelize('sqlite://:memory', { dialectModule: sqlJsAsSqlite3 });
+		const sequelize = new Sequelize('sqlite://:memory:', { dialectModule: sqlJsAsSqlite3 });
 
 		const User = sequelize.define('user', {
 			username: Sequelize.STRING,
@@ -38,7 +38,7 @@ describe('sequelize', function() {
 	})
 
 	it('should work with sequelize (random operations)', async function() {
-		const sequelize = new Sequelize('sqlite://:memory', { dialectModule: sqlJsAsSqlite3 });
+		const sequelize = new Sequelize('sqlite://:memory:', { dialectModule: sqlJsAsSqlite3 });
 
 		const User = sequelize.define('user', {
 			username: Sequelize.STRING,
