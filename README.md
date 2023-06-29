@@ -31,7 +31,7 @@ const sequelize = new Sequelize('sqlite://:memory:', {
 
 See a [test](https://gitlab.com/catamphetamine/sql.js-as-sqlite3/-/blob/main/test/sequelize.test.js) for an example.
 
-Theoretically, using `sql.js` would allow Sequelize to run in a web browser, but when "bundling" Sequelize itself, and then including it on a web page, it throws [`Buffer is not defined`](https://github.com/sequelize/sequelize/issues/14654#issuecomment-1609773219) error. So seems like Sequelize itself is not ready for running in a web browser.
+There's a [pull request](https://github.com/sequelize/sequelize/issues/16207) that enables Sequelize to run in a web browser. Until it's merged, one could already use a [pre-built bundle](https://github.com/catamphetamine/sequelize/blob/feature/browser/packages/core/README-BROWSER.md#build).
 
 <!--
 See `./test/sequelize.js`.
