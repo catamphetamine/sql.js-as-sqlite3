@@ -1,6 +1,6 @@
 {
   "name": "sql.js-as-sqlite3",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "sqlite3-compatible interface for sql.js",
   "module": "index.js",
   "main": "index.cjs",

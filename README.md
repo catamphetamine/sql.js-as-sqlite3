@@ -29,9 +29,9 @@ const sequelize = new Sequelize('sqlite://:memory:', {
 })
 ```
 
-See a [test](https://gitlab.com/catamphetamine/sql.js-as-sqlite3/-/blob/main/test/sequelize.test.js) for an example.
+See a [test](https://gitlab.com/catamphetamine/sql.js-as-sqlite3/-/blob/main/test/sequelize.test.js) for a server-side example.
 
-There's a [pull request](https://github.com/sequelize/sequelize/issues/16207) that enables Sequelize to run in a web browser. Until it's merged, one could already use a [pre-built bundle](https://github.com/catamphetamine/sequelize/blob/feature/browser/packages/core/README-BROWSER.md#build).
+For a client-side example, see [`sequelize-browser`](https://www.npmjs.com/package/sequelize-browser) package.
 
 <!--
 See `./test/sequelize.js`.
