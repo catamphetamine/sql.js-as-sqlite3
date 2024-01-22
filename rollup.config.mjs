@@ -21,6 +21,9 @@ export default [
       name: 'sqlJsAsSqlite3',
       file: 'bundle/sql.js-as-sqlite3.min.js',
       sourcemap: true
-    }
+    },
+    external: [
+      'sql.js'
+    ]
   }
 ]

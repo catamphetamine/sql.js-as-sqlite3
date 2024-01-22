@@ -12,11 +12,57 @@ Based on [this code by @domasx2](https://github.com/sql-js/sql.js/issues/91#issu
 npm install sql.js sql.js-as-sqlite3 --save
 ```
 
-If you're not using a bundler then use a [standalone version from a CDN](#cdn).
+If you're not using a bundler then use a [standalone version from a CDN](#browser-no-bundler).
 
 ## Use
 
-### Sequelize
+### Node.js
+
+```js
+import sqlJsAsSqlite3 from 'sql.js-as-sqlite3'
+
+console.log(sqlJsAsSqlite3)
+```
+
+### Browser (with bundler)
+
+```js
+import sqlJsAsSqlite3 from 'sql.js-as-sqlite3'
+import initSqlJs from 'sql.js'
+
+sqlJsAsSqlite3.configure({
+  // `sql.js` package default export.
+  initSqlJs,
+  // Base URL to get the `*.wasm` files like `sql-wasm-debug.wasm`.
+  // The version of the `*.wasm` files must match the version of the `sql.js` package.
+  // Must end with a "/".
+  wasmFileBaseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/'
+})
+
+console.log(sqlJsAsSqlite3)
+```
+
+### Browser (no bundler)
+
+One can use any npm CDN service, e.g. [unpkg.com](https://unpkg.com) or [jsdelivr.net](https://jsdelivr.net)
+
+```html
+<script src="https://unpkg.com/sql.js-as-sqlite3@0.2.x/bundle/sql.js-as-sqlite3.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/sql-wasm.min.js"></script>
+<script>
+  // Base URL to get the `*.wasm` files like `sql-wasm-debug.wasm`.
+  // The version of the `*.wasm` files must match the version of `sql.js`.
+  // Must end with a "/".
+  SQL_JS_WASM_FILE_BASE_URL = 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/'
+</script>
+
+<script>
+  console.log(sqlJsAsSqlite3)
+</script>
+```
+
+## Sequelize
 
 This package could be used to make [`sequelize`](https://www.npmjs.com/package/sequelize) work with `sqlite` database:
 
@@ -36,18 +82,6 @@ For a client-side example, see [`sequelize-browser`](https://www.npmjs.com/packa
 <!--
 See `./test/sequelize.js`.
 -->
-
-## CDN
-
-One can use any npm CDN service, e.g. [unpkg.com](https://unpkg.com) or [jsdelivr.net](https://jsdelivr.net)
-
-```html
-<script src="https://unpkg.com/sql.js-as-sqlite3@0.1.x/bundle/sql.js-as-sqlite3.min.js"></script>
-
-<script>
-  console.log(sqlJsAsSqlite3)
-</script>
-```
 
 ## TypeScript
 

@@ -1,6 +1,6 @@
-import Database from './Database.js'
+import Database, { configure } from './Database.js'
 
-export { default as Database } from './Database.js'
+export { default as Database, configure } from './Database.js'
 
 // https://github.com/TryGhost/node-sqlite3/wiki/API#sqlite3verbose
 // "Sets the execution mode to verbose to produce long stack traces.
@@ -17,5 +17,6 @@ export function verbose() {
 
 export default {
 	Database,
-	verbose
+	verbose,
+	configure
 }

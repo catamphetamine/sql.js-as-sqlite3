@@ -1,9 +1,13 @@
 import EventEmitter from 'eventemitter3'
-import initSqlJs from 'sql.js'
 
 import getNextTickFunction from './getNextTickFunction.js'
 
-const SQL_JS_WASM_FILE_BASE_URL = 'https://sql.js.org/dist/'
+let config = {}
+
+export function configure({ initSqlJs, wasmFileBaseUrl }) {
+	config.initSqlJs = initSqlJs
+	config.wasmFileBaseUrl = wasmFileBaseUrl
+}
 
 // `sqlite3`'s `Database` interface:
 // https://github.com/TryGhost/node-sqlite3/blob/master/lib/sqlite3.d.ts
@@ -64,31 +68,15 @@ export default class Database extends EventEmitter {
 		// "Required to load the wasm binary asynchronously.
 		//  Of course, you can host it wherever you want".
 		//
-		const sqlJsWasmFileBaseUrl = getEnvVars() && getEnvVars().SQL_JS_WASM_FILE_BASE_URL || SQL_JS_WASM_FILE_BASE_URL
+		// A client application could define the "base" URL of a WASM file either way:
+		// * By calling `.config()` static function with a `wasmFileBaseUrl` parameter.
+		// * By setting `window.SQL_JS_WASM_FILE_BASE_URL` global variable.
+		//
+		const sqlJsWasmFileBaseUrl = config.wasmFileBaseUrl || (typeof window !== 'undefined' ? window.SQL_JS_WASM_FILE_BASE_URL : undefined)
 
 		const isNodeJs = (typeof process !== 'undefined') && (process.release.name === 'node')
 
-		// Initialize `sql.js` — fetch the ".wasm" file and run it.
-		initSqlJs({
-			// "You can omit `locateFile` when running in Node.js".
-			//
-			// When `locateFile` parameter is not omitted in Node.js, it throws an error:
-			// "Error: ENOENT: no such file or directory, open 'https:\sql.js.org\dist\sql-wasm.wasm'".
-			//
-			// May be somehow related: https://github.com/sql-js/sql.js/issues/528
-			//
-			locateFile: isNodeJs ? undefined : filename => `${sqlJsWasmFileBaseUrl}${filename}`
-		}).then((SQL) => {
-			// Create a database.
-			this.database = new SQL.Database()
-			// "If opening succeeded, an `open` event with no parameters is emitted,
-			//  regardless of whether a `callback` was provided or not".
-			this.emit('open')
-			// Call the `callback`.
-			if (callback) {
-				callCallbackAsynchronously(null)
-			}
-		}, (error) => {
+		const onError = (error) => {
 			if (callback) {
 				// Call the `callback`.
 				callCallbackAsynchronously(error)
@@ -98,7 +86,53 @@ export default class Database extends EventEmitter {
 				// will be emitted".
 				this.emit('error', error)
 			}
-		})
+		}
+
+		const onSuccess = () => {
+			// "If opening succeeded, an `open` event with no parameters is emitted,
+			//  regardless of whether a `callback` was provided or not".
+			this.emit('open')
+			// Call the `callback`.
+			if (callback) {
+				callCallbackAsynchronously(null)
+			}
+		}
+
+		if (!isNodeJs) {
+			if (!sqlJsWasmFileBaseUrl) {
+				return onError(new Error('The base URL for `sql.js` `*.wasm` files is not configured'))
+			}
+			if (sqlJsWasmFileBaseUrl[sqlJsWasmFileBaseUrl.length - 1] !== '/') {
+				return onError(new Error('The base URL for `sql.js` `*.wasm` files must end with a "/"'))
+			}
+		}
+
+		const initSqlJsPromise = config.initSqlJs ? Promise.resolve(config.initSqlJs) : (
+			isNodeJs ? import('sql.js').then(_ => _.default) : (
+				typeof window !== 'undefined' ? Promise.resolve(window.initSqlJs) : Promise.reject(new Error('`window` is not defined'))
+			)
+		)
+
+		initSqlJsPromise.then((initSqlJs) => {
+			if (!initSqlJs) {
+				return onError(new Error('`sql.js` not found'))
+			}
+			// Initialize `sql.js` — fetch the ".wasm" file and run it.
+			return initSqlJs({
+				// "You can omit `locateFile` when running in Node.js".
+				//
+				// When `locateFile` parameter is not omitted in Node.js, it throws an error:
+				// "Error: ENOENT: no such file or directory, open 'https:\sql.js.org\dist\sql-wasm.wasm'".
+				//
+				// May be somehow related: https://github.com/sql-js/sql.js/issues/528
+				//
+				locateFile: isNodeJs ? undefined : filename => `${sqlJsWasmFileBaseUrl}${filename}`
+			}).then((SQL) => {
+				// Create a database.
+				this.database = new SQL.Database()
+				onSuccess()
+			}, onError)
+		}, onError)
 	}
 
 	// "Closes the database.

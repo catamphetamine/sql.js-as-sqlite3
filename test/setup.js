@@ -1,4 +1,4 @@
-import chai, { expect } from 'chai'
+import { expect, should } from 'chai'
 
 global.expect = expect
-chai.should()
+should()
