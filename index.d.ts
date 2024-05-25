@@ -8,12 +8,16 @@ interface Config {
 
 export class Database extends DatabaseClass {}
 
-export function verbose(): Library;
+export function verbose(): SqlJsAsSqlite;
 
 export function configure(config: Config): void;
 
-export interface Library {
+export interface SqlJsAsSqlite {
 	Database: typeof Database;
 	verbose(): this;
 	configure(config: Config): void;
 }
+
+declare const sqlJsAsSqlite: SqlJsAsSqlite;
+
+export default sqlJsAsSqlite;

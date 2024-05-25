@@ -33,7 +33,7 @@ import initSqlJs from 'sql.js'
 sqlJsAsSqlite3.configure({
   // `sql.js` package default export.
   initSqlJs,
-  // Base URL to get the `*.wasm` files like `sql-wasm-debug.wasm`.
+  // Base URL for `sql.js` to get the `*.wasm` files like `sql-wasm-debug.wasm`.
   // The version of the `*.wasm` files must match the version of the `sql.js` package.
   // Must end with a "/".
   wasmFileBaseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/'
@@ -51,7 +51,7 @@ One can use any npm CDN service, e.g. [unpkg.com](https://unpkg.com) or [jsdeliv
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/sql-wasm.min.js"></script>
 <script>
-  // Base URL to get the `*.wasm` files like `sql-wasm-debug.wasm`.
+  // Base URL for `sql.js` to get the `*.wasm` files like `sql-wasm-debug.wasm`.
   // The version of the `*.wasm` files must match the version of `sql.js`.
   // Must end with a "/".
   SQL_JS_WASM_FILE_BASE_URL = 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/'
