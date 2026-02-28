@@ -1,6 +1,6 @@
 {
   "name": "sql.js-as-sqlite3",
-  "version": "0.2.1",
+  "version": "0.2.3",
   "description": "sqlite3-compatible interface for sql.js",
   "module": "index.js",
   "main": "index.cjs",
@@ -16,7 +16,8 @@
   },
   "sideEffects": false,
   "scripts": {
-    "test": "mocha --colors --bail --reporter spec --require ./test/setup.js \"./{,!(node_modules|commonjs|modules)/**/}*.test.js\" --recursive",
+    "test": "mocha --bail \"source/**/*.test.js\" \"test/*.test.js\" \"test/!(exports)/**/*.test.js\"",
+    "test:exports": "mocha --bail \"test/exports/**/*.test.js\"",
     "clean-for-build": "rimraf --glob ./commonjs/**/* ./modules/**/*",
     "build-commonjs-modules": "cross-env BABEL_ENV=commonjs babel ./source --out-dir ./commonjs --source-maps",
     "build-commonjs-package.json": "node runnable/create-commonjs-package-json.js",
@@ -24,7 +25,7 @@
     "build-es6-modules": "cross-env BABEL_ENV=es6 babel ./source --out-dir ./modules --source-maps",
     "browser-build": "rollup --config rollup.config.mjs",
     "build": "npm-run-all clean-for-build build-commonjs build-es6-modules browser-build",
-    "prepublishOnly": "npm-run-all build test browser-build"
+    "prepublishOnly": "npm-run-all build test test:exports browser-build"
   },
   "peerDependencies": {
     "sql.js": "*"
@@ -40,6 +41,10 @@
     "@babel/plugin-transform-runtime": "^7.23.7",
     "@babel/preset-env": "^7.23.8",
     "@babel/register": "^7.23.7",
+    "@rollup/plugin-commonjs": "^29.0.0",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-terser": "^0.4.4",
     "better-npm-run": "^0.1.1",
     "chai": "^5.0.0",
     "core-js": "^3.35.1",
@@ -48,13 +53,9 @@
     "npm-run-all": "^4.1.5",
     "regenerator-runtime": "^0.14.1",
     "rimraf": "^5.0.5",
-    "rollup": "3",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-json": "^4.0.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-terser": "^7.0.2",
-    "sequelize": "^6.35.2",
-    "sql.js": "^1.10.3"
+    "rollup": "^4.59.0",
+    "sequelize": "^6.37.7",
+    "sql.js": "^1.14.0"
   },
   "repository": {
     "type": "git",

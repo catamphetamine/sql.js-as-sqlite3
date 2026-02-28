@@ -1,4 +1,7 @@
-import URL from 'node:url'
+import { describe, it } from 'mocha'
+import { expect } from 'chai'
+
+// import URL from 'node:url'
 
 import Sequelize from 'sequelize'
 import initSqlJs from 'sql.js'
@@ -34,7 +37,7 @@ describe('sequelize', function() {
 		delete user.createdAt
 		delete user.updatedAt
 
-		user.should.deep.equal({
+		expect(user).to.deep.equal({
 			id: 1,
 			username: 'jane',
 			birthday: new Date('1980-07-01T00:00:00.000Z')

@@ -1,4 +1,7 @@
-import URL from 'node:url'
+import { describe, it } from 'mocha'
+import { expect } from 'chai'
+
+//import URL from 'node:url'
 
 import Sequelize from 'sequelize'
 
@@ -27,7 +30,7 @@ describe('sequelize', function() {
 		delete user.createdAt
 		delete user.updatedAt
 
-		user.should.deep.equal({
+		expect(user).to.deep.equal({
 			id: 1,
 			username: 'jane',
 			birthday: new Date('1980-07-01T00:00:00.000Z')
@@ -58,7 +61,7 @@ describe('sequelize', function() {
 		delete jane.createdAt
 		delete jane.updatedAt
 
-		jane.should.deep.equal({
+		expect(jane).to.deep.equal({
 			id: 1,
 			username: 'jane',
 			birthday: new Date('1980-07-01T00:00:00.000Z')
@@ -80,7 +83,7 @@ describe('sequelize', function() {
 		delete john.createdAt
 		delete john.updatedAt
 
-		john.should.deep.equal({
+		expect(john).to.deep.equal({
 			id: 2,
 			username: 'john',
 			birthday: new Date('1980-01-01T00:00:00.000Z')
@@ -96,9 +99,9 @@ describe('sequelize', function() {
 			}
 		})
 
-		users.length.should.equal(2)
-		users[0].id.should.equal(jane.id)
-		users[1].id.should.equal(john.id)
+		expect(users.length).to.equal(2)
+		expect(users[0].id).to.equal(jane.id)
+		expect(users[1].id).to.equal(john.id)
 
 		// Delete the first user.
 		await users[0].destroy()
@@ -113,8 +116,8 @@ describe('sequelize', function() {
 			}
 		})
 
-		users.length.should.equal(1)
-		users[0].id.should.equal(john.id)
+		expect(users.length).to.equal(1)
+		expect(users[0].id).to.equal(john.id)
 
 		// Get the user by username.
 
@@ -124,7 +127,7 @@ describe('sequelize', function() {
 			}
 		})
 
-		johnByUsername.id.should.equal(john.id)
+		expect(johnByUsername.id).to.equal(john.id)
 
 		// Clear the database.
 		await User.truncate()
